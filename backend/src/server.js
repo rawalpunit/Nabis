@@ -1,4 +1,5 @@
 import express from 'express';
+const cors = require('cors');
 import graphqlHTTP from 'express-graphql';
 import resolverMap from './data/resolvers';
 import { makeExecutableSchema } from 'graphql-tools';
@@ -14,12 +15,21 @@ const MySchema = makeExecutableSchema({
 
 const app = express();
 
-app.use('/graphql', graphqlHTTP({
+app.use(cors());
+
+app.get('/name', (req, res) => { res.json({"abs": "ok"})});
+
+app.post('/graphql', graphqlHTTP({
   schema: MySchema,
   graphiql: true
 }));
+
+// app.get('/graphiql', graphqlHTTP({ endpointURL: '/graphql' }))
+
 
 const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`App listening on port: ${PORT}`);
 });
+
+
